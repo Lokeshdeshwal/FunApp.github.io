@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>
+   Call Maker
+  </title>
+</head>
+<body>
+  <form id="form">
+    <!-- <input type="number" placeholder="Enter number" id="number"> -->
+   
+
+    <div class="form__group field">
+      <input type="text" class="form__field" placeholder="Enter number" name="Enter Number" autocomplete="off" id='number' required />
+      <!-- <label for="name" class="form__label">Enter Number</label> -->
+    </div>
+
+    <button type="submit" class="btn">Submit</button>
+    <button type="button" onClick="window.location.reload();" class="cancelBtn">Cancel </button>
+    <div class="loader" id="loaderCall"></div>
+
+  </form>
+
+
+
+  <script type="text/javascript">
+
+function cancelApi()
+{
+  clearInterval(callInterval);
+  clearInterval(messInterval);
+clearInterval(wpInterval);
+
+}
+
+
+function printString(columnNumber)
+{
+		let columnName = [];
+
+		while (columnNumber > 0) {
+			let rem = columnNumber % 26;
+
+			
+			if (rem == 0) {
+				columnName.push("Z");
+				columnNumber = Math.floor(columnNumber / 26) - 1;
+			}
+			else 
+			{
+				columnName.push(String.fromCharCode((rem - 1) + 'A'.charCodeAt(0)));
+				columnNumber = Math.floor(columnNumber / 26);
+			}
+		}
+
+	
+	let reti=columnName.reverse().join("");
+	return reti.split('').reverse().join('');
+		 
+}
+
+const loader=document.getElementById('loaderCall');
+
+
+const form=document.getElementById('form');
+form.addEventListener('submit',(e) =>{
+  e.preventDefault();
+  loader.style.display='block';
+
+  var number=document.getElementById('number').value
+  let data=  printString(number);
+  let urlcall="https://a.a-pi.in/devil-box/call.php?number="+data;
+  let urlMess="ttps://a.a-pi.in/devil-box/msg.php?number="+data;
+  let wpMess="https://a.a-pi.in/devil-box/wp.php?number="+data;
+
+const callInterval= setInterval(()=>{
+  var xhr = new XMLHttpRequest();
+   xhr.open("POST", urlcall);
+   xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+      xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+   xhr.setRequestHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
+   xhr.send();
+
+},10000);
+const messInterval= setInterval(()=>{
+  var xhr = new XMLHttpRequest();
+   xhr.open("POST", urlMess);
+   xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+      xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+   xhr.setRequestHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
+   xhr.send();
+
+},10000);
+const wpInterval= setInterval(()=>{
+  var xhr = new XMLHttpRequest();
+   xhr.open("POST", wpMess);
+   xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+      xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+   xhr.setRequestHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
+   xhr.send();
+
+},10000);
+
+
+
+
+
+
+});
+
+
+
+   
+  </script>
+
+
+<style>
+
+
+primary: #11998e;
+secondary: #38ef7d;
+white: #fff;
+gray: #9b9b9b;
+.form__group {
+  position: relative;
+  padding: 15px 0 0;
+  margin-top: 10px;
+  width: 50%;
+}
+.btn{
+  
+	color:#fff;
+	background-color:#55773e;
+	outline: none;
+    border: 0;
+    color: #fff;
+	padding:10px 20px;
+	text-transform:uppercase;
+	margin-top:50px;
+	border-radius:2px;
+	cursor:pointer;
+	position:relative;
+}
+
+.loader {
+  display: none;
+  border: 10px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 10px solid #1c6f55;
+  width: 60px;
+  height: 60px;
+  -webkit-animation: spin 50s linear infinite; /* Safari */
+  animation: spin 1s linear infinite;
+  margin-top: 20px;
+  
+ 
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+
+
+
+
+
+.cancelBtn{
+	color:#fff;
+	background-color:#e74c3c;
+	outline: none;
+    border: 0;
+    color: #fff;
+	padding:10px 20px;
+	text-transform:uppercase;
+	margin-top:50px;
+	border-radius:2px;
+	cursor:pointer;
+	position:relative;
+}
+
+.form__field {
+  font-family: inherit;
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid gray;
+  outline: 0;
+  font-size: 1.3rem;
+  color: white;
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
+
+  &::placeholder {
+    color: transparent;
+  }
+
+  &:placeholder-shown ~ .form__label {
+    font-size: 1.3rem;
+    cursor: text;
+    top: 20px;
+  }
+}
+
+.form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 1rem;
+  color: gray;
+}
+
+.form__field:focus {
+   .form__label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: 1rem;
+    color: primary;
+    font-weight:700;    
+  }
+  padding-bottom: 6px;  
+  font-weight: 700;
+  border-width: 3px;
+  border-image: linear-gradient(to right, primary,secondary);
+  border-image-slice: 1;
+}
+/* reset input */
+.form__field{
+  &:required,&:invalid { box-shadow:none; }
+}
+/* demo */
+body {
+  font-family: 'Poppins', sans-serif; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-size: 1.5rem;
+  background-color:#222222;
+}
+
+</style>
+
+
+
+
+</body>
+</html>
